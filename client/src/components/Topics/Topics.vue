@@ -34,7 +34,6 @@ export default {
         axiosbase.get("/topics")
             .then(response => {
                 this.topics = response.data.metadata
-                console.log(this.topics)
             })
             .catch(e=> {
                 console.log(e)

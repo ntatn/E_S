@@ -15,6 +15,12 @@ class PracticeController {
             metadata: await PracticeService.createPractice(req.params.id, req.headers['x-client-id'], {...req.body})
         }).send(res)
     }
+    findPractice = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'created successfully',
+            metadata: await PracticeService.findPractice(req.params.id, req.headers['x-client-id'])
+        }).send(res)
+    }
 }
 
 export default new PracticeController

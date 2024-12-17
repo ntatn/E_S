@@ -16,7 +16,7 @@ const lessonSchema = new Schema({
         default: [
             {
                 tag: {
-                    type: String,
+                    type: Number,
                     required: true
                 },
                 question: {

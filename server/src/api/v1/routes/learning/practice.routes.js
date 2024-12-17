@@ -8,5 +8,5 @@ router.post('/compare',uploadMiddleware.single('audio'), asyncHandler(practiceCo
 
 router.use(authentication)
 router.post('/:id', asyncHandler(practiceController.createPractice))
-
+router.post('/lesson/:id', asyncHandler(practiceController.findPractice))
 export default router

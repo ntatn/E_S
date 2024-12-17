@@ -15,8 +15,6 @@
 <script>
 export default {
     props: ['topic'],
-    mounted() {
-        console.log(this.topic.title)
-    },
+    
 }
 </script>

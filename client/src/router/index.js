@@ -7,6 +7,7 @@ import LearningView from '../views/LearningView.vue'
 import ProfileView from '../views/ProfileView.vue'
 import LearnLesson from '../components/Topics/LearnLesson.vue'
 import QuizView from '../views/QuizView.vue'
+import ResultView from '../views/ResultView.vue'
 import auth from '../app/auth.js'
 
 const ifNotAuthorized = (to, from, next) => {
@@ -65,6 +66,11 @@ const router = createRouter({
       path: '/lesson/:id',
       name: 'Quiz',
       component: QuizView
+    },
+    {
+      path: '/result/:id',
+      name: 'result',
+      component: ResultView
     },
     {
       path: '/profile',

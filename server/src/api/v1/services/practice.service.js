@@ -1,9 +1,10 @@
 import practiceModel from '../models/practiceModel.js'
 import { BadRequestError} from '../middlewares/error.response.js'
 import { CREATED } from '../middlewares/success.response.js'
+import { getIntoData } from '../utils/index.js'
 import { AssemblyAI } from 'assemblyai'
 import 'dotenv/config'
-import  splitText from '../middlewares/translateMiddlewares.js'
+
 class PracticeService {
     
     static transcriptionText = async (sample, trans) => {
@@ -54,9 +55,9 @@ class PracticeService {
         
     }
     static createPractice = async (lessonId, userId, {score, time}) => {
-        const foundLesson = await practiceModel.findOne({lessonId: lessonId}).lean()
+        const foundLesson = await practiceModel.findOne({lessonId: lessonId, userId: userId}).lean()
         if(foundLesson) {
-            const filter = {lessonId: lessonId}, update = {
+            const filter = {lessonId: lessonId, userId: userId}, update = {
                     score,
                     time
             }, options = {new: true, upsert: true}
@@ -71,6 +72,14 @@ class PracticeService {
                 time
             })
         }
+    }
+    static findPractice = async (lessonId, userId) => {
+        try{
+            const selectedLesson = await practiceModel.findOne({lessonId: lessonId, userId: userId});
+            return getIntoData({fileds: ['score', 'time'], object: selectedLesson})
+        }catch(err){
+            throw new BadRequestError(err)
+        } 
     }
 
 
