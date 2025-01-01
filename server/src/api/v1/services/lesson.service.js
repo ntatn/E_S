@@ -3,9 +3,10 @@ import { CREATED } from '../middlewares/success.response.js'
 import lesson from '../models/lessonModel.js'
 import { getIntoData } from '../utils/index.js'
 class lessonService {
-    static createLesson = async (topicId, {tag,  question, correctSentence, translate, audioUrl}) => {
+    static createLesson = async (topicId, {title, tag,  question, correctSentence, translate, audioUrl}) => {
         try { 
-            const filter = {topicId: topicId, count: {$lt: 10}}, update = {
+            const filter = {topicId: topicId, title: title, count: {$lt: 13}}, update = {
+
                 $push: {
                     contents: {
                         tag,
@@ -26,13 +27,13 @@ class lessonService {
     }
 
     static findAllLessons = async (topicId) => {
-        return await lesson.find({topicId: topicId}).limit(10).lean()
+        return await lesson.find({topicId: topicId}).limit(13).lean()
     }
 
     static findOneLesson = async (lessonId) => {
         try{
             const selectedLesson = await lesson.findOne({_id: lessonId})
-            return getIntoData({fileds: ['contents'], object: selectedLesson})
+            return getIntoData({fileds: ['contents', 'count'], object: selectedLesson})
         }catch(err){
             throw new BadRequestError(err)
         }

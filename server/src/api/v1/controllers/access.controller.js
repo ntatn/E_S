@@ -29,6 +29,18 @@ class AccessController {
         next(error)
        }
     }
+    getUser = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'Found user',
+            metadata: await AccessService.getProfile(req.headers['x-client-id'])
+        }).send(res)
+    }
+    updateUser = async (req, res, next) => {
+        new SuccessResponse({
+            message: 'Updated user',
+            metadata: await AccessService.updateProfile(req.headers['x-client-id'], {...req.body})
+        }).send(res)
+    }
     
 }
 

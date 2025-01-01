@@ -11,6 +11,10 @@ const lessonSchema = new Schema({
         type: Number,
         required: true
     },
+    title: {
+        type: String,
+        required: true
+    },
     contents: {
         type: Array,
         default: [

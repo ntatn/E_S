@@ -5,128 +5,79 @@
                 <img class="rounded-full w-12 h-12 mr-4" height="50" src="https://storage.googleapis.com/a1aa/image/KYCUGqcFp3JiLhLKpeem3CJSYfpffLVhKMfpnnIPnoPOKVYeJA.jpg" alt="img profile">
                 <div>
                     <h2 class="font-semibold ">
-                        An Nguyen
+                        {{ user.name }}
                     </h2>
                     <p class="text-sm text-gray-500">
-                        <i class="fa-solid"> Beginners</i>
+                        <i class="fa-solid"> {{user.level}}</i>
                     </p>
                 </div>
             </div>
-            <div class="mt-9 mb-2">
+            <div class="mt-9 mb-2 flex ">
+                <Bars3Icon class="size-6 mr-2"/>
                 MENU
             </div>
             <hr class="border-gray-400">
             <nav>
                 <ul>
                     <li class=" mt-5 mb-5 p-2 ">
-                        <a class="flex items-center text-blue-600 " href="#">
-                            <i class="fas fa-user-circle mr-2">
-                            </i>
+                        <button class="flex items-center" v-on:click="page3 = false; page2 = false" :class="page2 == false && page3 == false ? 'text-blue-600' : 'text-[#404040]'">
+                            <UserCircleIcon class="size-6 mr-2"/>
                             My Profile
-                        </a>
+                        </button>
                     </li>
                     <li class="mb-5 p-2">
-                        <a class="flex items-center text-[#404040]" href="#">
-                            <i class="fas fa-book mr-2">
-                            </i>
+                        <button class="flex items-center text-[#404040]" v-on:click="page2 = true" :class="page2 == true ? 'text-blue-600' : 'text-[#404040]'">
+                            <FolderIcon class="size-6 mr-2"/>
                             My Courses
-                        </a>
+                        </button>
                     </li>
                     <li class="mb-5 p-2">
-                        <a class="flex items-center text-[#404040]" href="#">
-                            <i class="fas fa-cog mr-2">
-                            </i>
+                        <button class="flex items-center text-[#404040]" v-on:click="page2 = false; page3 = true" :class="page2 == false && page3 == true ? 'text-blue-600' : 'text-[#404040]'">
+                            <Cog6ToothIcon class="size-6 mr-2"/>
                             Settings
-                        </a>
+                        </button>
                     </li>
                 </ul>
             </nav>
         </aside>
         <main class="flex-1 p-6">
-            <div class="bg-blue-500 text-white p-6 rounded-lg mb-6">
-                <h1 class="text-2xl font-semibold">
-                    Hi An, Good Afternoon!
-                </h1>
-                <p class="mt-2">
-                    You've learned 70% of your goal this week! Keep it up and improve your progress.
-                </p>
-            </div>
-            <div class="grid grid-cols-2 gap-6 mb-6">
-                <div class="bg-white p-6 rounded-lg shadow">
-                    <div class="flex justify-center items-center mb-4">
-                        <div class="relative">
-                            <apexchart type="radialBar" height="350" :options="chartOptions" :series="series"></apexchart>
-                            <div class="absolute inset-0 flex justify-center items-center text-xl font-semibold">
-                            Điểm
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="border-gray-400">
-                    <div class="flex justity-between mt-4">
-                        <p class="text-gray-600">
-                            Lesson: 
-                        </p>
-                        
-                        <span class="font-semibold text-blue-600 ml-1">
-                            10
-                        </span>
-                    </div>
-                </div>
-                <div class="bg-white p-6 rounded-lg shadow">
-                   <div class="flex justify-between items-center mb-4">
-                        <h2 class="text-lg font-semibold">My Process</h2>
-                        <p class="text-gray-600"> July 2024 </p>
-                        <div class="flex items-center">
-                            <i class="fas fa-chevron-left text-gray-400 mr-2">
-                            </i>
-                            <i class="fas fa-chevron-right text-gray-400">
-                            </i>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-7 gap-2 text-center text-gray-600">
-                        <div>Mon</div>
-                        <div>Tue</div>
-                        <div>Wed</div>
-                        <div>Thu</div>
-                        <div>Fri</div>
-                        <div>Sat</div>
-                        <div>Sun</div>
-                    </div>
-                    <div class="grid grid-cols-7 gap-2 text-center mt-2">
-                        <div class="pt-2 " v-for="n in 31" :key="n" :class="n<10 ? rounded : '' ">{{ n }}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white p-6 rounded-lg shadow">
 
-            </div>
+            <MyCourse v-if="page2"/>
+            <Settings v-bind:user="user" v-else-if="page3"/>
+            <MyProfile v-else/>
         </main>
     </div>
 </template>
-
+<script setup>
+import { axiosdefault } from '../../interceptors/axios-base';
+import MyCourse from './MyCourse.vue';
+import MyProfile from './MyProfile.vue';
+import Settings from './Settings.vue';
+import { UserCircleIcon, Cog6ToothIcon, FolderIcon, Bars3Icon} from '@heroicons/vue/24/solid'
+</script>
 <script >
 export default {
     data() {
         return {
-            rounded: 'text-yellow-500',
-            series: [70],
-            chartOptions: {
-                chart: {
-                    height: 350,
-                    type: 'radialBar',
-                },
-                plotOptions: {
-                    radialBar: {
-                        hollow: {
-                            size: '60%',
-                        }
-                    },
-                },
-                labels: [''],
-
-            },
+            page2: false,
+            page3: false,
+            user: {
+                name: '',
+                email: '',
+                level: ''
+            }
         }
     },
+    mounted() {
+        axiosdefault.get("/user")
+            .then(res => {
+                this.user = res.data.metadata.metadata.user
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
+        
+    }
 }
 </script>
 

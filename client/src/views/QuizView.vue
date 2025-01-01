@@ -7,19 +7,20 @@
             </div>
         </div>
         <div  class=" w-full h-[54px]  px-[108px] py-3 bg-[#dfdfdf] justify-center items-center gap-6 inline-flex">
+            <ChevronDoubleLeftIcon @click="goBack" class="size-6 cursor-pointer" />
             <div class="w-[137px] text-[#1c1c1c] text-sm font-normal">Câu hỏi số {{currentIndex + 1}}</div>
             <div class=" grow shrink basis-0 h-[15px] p-1 bg-[#f3f7fc] rounded-lg justify-start items-start gap-0.5 flex">
                 <div v-for="(session, index) in sessions" :key="index" :class="index <= currentIndex ? bgblue : bgwhite" class=" w-full h-[7px] relative rounded-[25px] shadow" ></div>
-                
             </div>
         </div>
         
         <div class="text-center">
-            <button class="my-5 mx-10 absolute right-0 bg-[#46DFB1] text-white w-16 border rounded-lg h-8" disabled>
-                {{ formattedTime }}
-            </button>
-            <span class="my-5 ml-60 pl-7  absolute left-0">
-                {{ inputTag }}
+            <div class="my-5 mx-10 absolute right-0 bg-[#46DFB1] text-white w-20 border rounded-lg h-9 flex items-center " disabled>
+                <ClockIcon class="size-6 mx-1"/>
+                <span class="mr-1">{{ formattedTime }}</span>
+            </div>
+            <span class="my-5 ml-60 pl-7  absolute left-0 flex">
+                <PaperClipIcon class="size-6 mr-2"/>{{ inputTag }}
             </span>
             <h1  class="text-2xl font-bold mb-16 mt-16">
                 <span v-if="isChecked">{{sessions[currentIndex].question}}</span>
@@ -27,12 +28,12 @@
             </h1>
             <div class="pb-14">{{ sessions[currentIndex].translate }}</div>
             <div  class="flex flex-cols-2 justify-center gap-8">
-                <audio type="audio/mpeg" :src="sessions[currentIndex].audioUrl"  controls></audio>
+                <audio type="audio/mpeg" :src="sessions[currentIndex].audioUrl" autoplay controls></audio>
                 <button v-if="!isRecording" @click="autoCheck" class="border border-red-500 rounded-lg py-2 px-4 ">
                     <i class="fas fa-microphone-slash"></i>
                 </button>
                 <button v-else @click="manualCheck" class="border border-green-500  rounded-lg py-2 px-4 ">
-                    <i class="fas fa-microphone"></i>
+                    <MicrophoneIcon class="size-6"/>
                 </button>
             </div>
         </div>
@@ -40,7 +41,7 @@
             <button @click="preQuestion" :disabled="currentIndex == 0"  class="border border-blue-500 text-blue-500 ml-72 py-2 px-4 rounded-md">
                 Quay lại
             </button>
-            <button @click="nextQuestion" v-if="currentIndex < 9" class="bg-blue-500 mr-72 text-white py-2 px-4 rounded-md">
+            <button @click="nextQuestion" v-if="currentIndex < count - 1" class="bg-blue-500 mr-72 text-white py-2 px-4 rounded-md">
                 Tiếp theo
             </button>
             <button v-else @click="sendPratice" class="bg-[#80ee98] mr-72 text-white py-2 px-4 rounded-md">
@@ -58,6 +59,7 @@
 import FooterBar from '../components/FooterBar.vue';
 import HeaderBar from '../components/HeaderBar.vue';
 import { axiosdefault } from '../interceptors/axios-base';
+import {   ChevronDoubleLeftIcon, MicrophoneIcon, ClockIcon, PaperClipIcon } from '@heroicons/vue/24/solid'
 </script>
 
 <script>
@@ -126,7 +128,8 @@ export default {
         axiosdefault.get(`/topics/lesson/${sessionId}`)
             .then(res => {
                 this.sessions = res.data.metadata.contents
-                this.count = res.data.metadata.contents.length
+                this.count = res.data.metadata.count
+                console.log(this.count)
                 this.startTimer()
                 this.checkTag()
             })
@@ -151,7 +154,7 @@ export default {
             clearInterval(this.timer)
             const timeTaken = 300 - this.countdown
             const lessonId = this.$route.params.id
-            const average = this.score / 10
+            const average = this.score / this.count
             console.log(average)
             console.log(timeTaken)
             axiosdefault.post(`/practice/${lessonId}`, {
@@ -197,6 +200,7 @@ export default {
                 axiosdefault.post('/practice/compare', data, config)
                     .then(res => {
                         this.words = []
+                        console.log(res.data.metadata)
                         this.words = res.data.metadata.metadata.highLight
                         this.score += res.data.metadata.metadata.score
                         console.log(this.score)
@@ -221,12 +225,16 @@ export default {
                     this.isRecording = false
                     this.mediaRecorder.stop()
                 }
-            }, 10000)
+            }, 12000)
         },
         manualCheck(){
             this.mediaRecorder.stop()
             this.isRecording = false
             this.recorded()
+        },
+        goBack(){
+            clearInterval(this.timer)
+            this.$router.go(-1)
         }
     }
 }
