@@ -13,12 +13,9 @@
             <router-link class="text-gray-700 w-fit relative transition-all before:absolute before:bottom-0 before:right-0 before:h-0.5 before:w-0 before:bg-blue-400 before:transition-all before:duration-500 hover:before:left-0 hover:before:w-full hover:before:bg-red-500 " :to="{name: 'learn'}">
             Học
             </router-link>
-            <a class="text-gray-700 w-fit relative transition-all before:absolute before:bottom-0 before:right-0 before:h-0.5 before:w-0 before:bg-blue-400 before:transition-all before:duration-500 hover:before:left-0 hover:before:w-full hover:before:bg-red-500 " href="#">
+            <router-link class="text-gray-700 w-fit relative transition-all before:absolute before:bottom-0 before:right-0 before:h-0.5 before:w-0 before:bg-blue-400 before:transition-all before:duration-500 hover:before:left-0 hover:before:w-full hover:before:bg-red-500 " :to="{name:'feedback'}">
             Liên hệ
-            </a>
-            <a class="text-gray-700 w-fit relative transition-all before:absolute before:bottom-0 before:right-0 before:h-0.5 before:w-0 before:bg-blue-400 before:transition-all before:duration-500 hover:before:left-0 hover:before:w-full hover:before:bg-red-500 " href="#">
-            Thành tích
-            </a>
+            </router-link>
         </div>
         <div class="flex items-center space-x-2 ">
             <button class="group relative text-left z-10" >
@@ -32,7 +29,7 @@
                 </div>
             </button>
             <span class="text-gray-700">
-            EN
+            VN
             </span>
             <i class="fas fa-chevron-down text-gray-700">
             </i>

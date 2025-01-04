@@ -15,16 +15,17 @@
                 </div>
             </div>
             <div class="h-12 px-4 py-2 bg-[#ebad25] rounded-lg justify-center items-center gap-2 inline-flex">
-                <div class="text-white text-base font-normal">Let’s start</div>
+                <div v-on:click="showToast" class="text-white text-base font-normal">Let’s start</div>
             </div>
         </div>
         <div class="w-[726.92px] h-[536.04px] left-[808px] top-[59px] absolute">
             <img srcset="/student.png" alt="background">
         </div>
     </div>
-
+    
 </template>
 
 <script setup>
 
 </script>
+

@@ -15,6 +15,10 @@ const lessonSchema = new Schema({
         type: String,
         required: true
     },
+    thumb: {
+        type: String,
+        required: true
+    },
     contents: {
         type: Array,
         default: [

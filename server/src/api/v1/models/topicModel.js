@@ -12,8 +12,11 @@ const topicSchema = new Schema({
     description: {
         type: String,
         maxLength: 255
+    },
+    thumb: {
+        type: String,
+        required: true
     }
-
 },  {
     timestamps: true,
     collection: COLLECTION_NAME

@@ -6,9 +6,9 @@
             <ArrowLeftIcon @click="goBack" class="size-6 cursor-pointer font-bold mr-2"/>
             <h1 class="text-2xl font-bold mb-8">{{topic.title}}</h1>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <div v-for="(lesson, index) in lessons" :key="index" class=" border rounded-lg p-4">
-                <img src="/dulich.png" class="w-full h-48 object-cover rounded-lg mb-4">
+                <img :srcset="`/lessons/${lesson.thumb}`" class="w-full h-48 object-cover rounded-lg mb-4">
                 <h2 class="text-lg font-semibold mb-2" >{{ lesson.title }}</h2>
                 <div class="text-gray-600 mb-4">
                     <p><i class="fas fa-book"></i> Số lượng câu hỏi: {{lesson.count}} </p>

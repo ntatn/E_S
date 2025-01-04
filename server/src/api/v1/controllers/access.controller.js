@@ -30,6 +30,7 @@ class AccessController {
        }
     }
     getUser = async (req, res, next) => {
+        console.log(req.headers['x-client-id'])
         new SuccessResponse({
             message: 'Found user',
             metadata: await AccessService.getProfile(req.headers['x-client-id'])

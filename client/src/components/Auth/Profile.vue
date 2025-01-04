@@ -47,6 +47,13 @@
             <MyProfile v-else/>
         </main>
     </div>
+    <div class=" fixed top-3 right-3 flex flex-col gap-2 z-50">
+        <transition name="slide-left">
+                <fwb-toast v-if="isToastVisible" divide closable :type="typeOfToast">
+                    {{ contents }}
+                </fwb-toast>
+        </transition>
+    </div>
 </template>
 <script setup>
 import { axiosdefault } from '../../interceptors/axios-base';
@@ -54,6 +61,7 @@ import MyCourse from './MyCourse.vue';
 import MyProfile from './MyProfile.vue';
 import Settings from './Settings.vue';
 import { UserCircleIcon, Cog6ToothIcon, FolderIcon, Bars3Icon} from '@heroicons/vue/24/solid'
+import {FwbToast, FlowbiteThemable} from 'flowbite-vue'
 </script>
 <script >
 export default {
@@ -65,20 +73,48 @@ export default {
                 name: '',
                 email: '',
                 level: ''
-            }
+            },
+            isToastVisible: false,
+            typeOfToast: 'success',
+            contents: 'Your profile has been updated successfully'
         }
     },
     mounted() {
         axiosdefault.get("/user")
             .then(res => {
                 this.user = res.data.metadata.metadata.user
+                console.log(res)
             })
             .catch(err => {
                 console.log(err.message)
             })
-        
+            const shouldShowToast = localStorage.getItem('showToast')
+            if (shouldShowToast) {
+                this.showToast()
+                localStorage.removeItem('showToast')
+            }
+    },
+    methods: {
+        showToast() {
+            this.isToastVisible = true
+            setTimeout(() => {
+                this.isToastVisible = false;
+            }, 5000);
+        }
     }
 }
 </script>
+<style scoped>
+.slide-left-enter-active,
+.slide-left-leave-active {
+  transition: all 0.5s ease;
+}
+.slide-left-enter-from,
+.slide-left-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+</style>
+
 
 

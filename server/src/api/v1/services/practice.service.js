@@ -34,11 +34,11 @@ class PracticeService {
             else if (
                 word === words[currentIndex].text.toLowerCase().replace(/[.,?!]/g, "")
             ) {
-                if (words[currentIndex].confidence < 0.5) {
+                if (words[currentIndex].confidence < 0.3) {
                     
                     highLight.push({ word: wordArrayOriginal[currentIndex], level: "level-1" })
                     totalConfidence += words[currentIndex].confidence;
-                } else if (words[currentIndex].confidence > 0.75) {
+                } else if (words[currentIndex].confidence > 0.65) {
                     highLight.push({ word: wordArrayOriginal[currentIndex], level: "level-3" })
                     totalConfidence += words[currentIndex].confidence;
                 } else {
@@ -55,7 +55,7 @@ class PracticeService {
         if (averageConfidence === null) {
             averageConfidence = 0;
         }
-        
+        console.log(words)
         return new CREATED({
             metadata: {
                 score: averageConfidence,
@@ -101,6 +101,9 @@ class PracticeService {
         } catch (err) {
             throw new BadRequestError(err)
         }
+    }
+    static findAllPractices = async (userId) => {
+        return await practiceModel.find({userId: userId}).lean()
     }
 }
 

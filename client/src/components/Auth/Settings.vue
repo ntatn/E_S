@@ -5,10 +5,9 @@
             <form @submit.prevent="handleSubmit">
                 <div class="grid grid-cols-1 gap-4 mb-4">
                     <label class="block">Name</label>
-                    <input type="text" v-model="name"  placeholder="Name"
-                        class="border border-gray-300 p-2 rounded-md">
+                    <input type="text" v-model="name" placeholder="Name" class="border border-gray-300 p-2 rounded-md">
                     <label class="block">Email</label>
-                    <input type="text" v-model="email"  placeholder="Email"
+                    <input type="text" v-model="email" placeholder="Email"
                         class="border border-gray-300 p-2 rounded-md">
                     <label class="block">Level</label>
                     <select v-model="level" autocomplete="country-name"
@@ -23,14 +22,49 @@
 
                 <div class="flex justify-end">
 
-                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">Save </button>
+                    <fwb-button type="button" @click="showModal"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-md">Save </fwb-button>
                 </div>
             </form>
         </div>
     </div>
+    <fwb-modal v-if="isShowModal" size="xs" @close="closeModal">
+        <template #header>
+            <div class="flex items-center text-lg">
+                Terms of Service
+            </div>
+        </template>
+        <template #body>
+            <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
+                Mọi thông tin sẽ được thay đổi dựa trên yêu cầu của bạn. Bạn có chắc chắn muốn thay đổi thông tin không?
+            </p>
+        </template>
+        <template #footer>
+            <div class="flex justify-between">
+                <fwb-button @click="closeModal" color="alternative">
+                    Decline
+                </fwb-button>
+                <fwb-button @click="handleSubmit" color="green">
+                    I accept
+                </fwb-button>
+            </div>
+        </template>
+    </fwb-modal>
+    
 </template>
 <script setup>
 import { axiosdefault } from '../../interceptors/axios-base';
+import { ref } from 'vue'
+import { FwbButton, FwbModal } from 'flowbite-vue'
+
+const isShowModal = ref(false)
+
+function closeModal() {
+    isShowModal.value = false
+}
+function showModal() {
+    isShowModal.value = true
+}
 </script>
 <script>
 export default {
@@ -40,6 +74,7 @@ export default {
             name: this.user.name,
             email: this.user.email,
             level: this.user.level,
+            
         }
     },
     methods: {
@@ -48,8 +83,12 @@ export default {
                 name: this.name,
                 email: this.email,
                 level: this.level
-            }).then(this.$router.go)
-        }
+            }).then(
+                localStorage.setItem('showToast', 'true'),
+                this.$router.go()
+                
+            )
+        },
     }
 }
 </script>

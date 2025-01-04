@@ -1,22 +1,21 @@
 import topic from '../models/topicModel.js'
 import { BadRequestError } from '../middlewares/error.response.js'
 import {Types} from "mongoose"
-import { getIntoData } from '../utils/index.js'
+
 class TopicService {
 
-    static createTopics = async ({title, description}) =>{
+    static createTopics = async ({title, description, thumb}) =>{
         const hasTopic = await topic.findOne({ title }).lean()
         if(hasTopic){
             throw new BadRequestError('Topic already exists')
         }
         const newTopic = await topic.create({
-            title, description
+            title, description, thumb
         })
         return newTopic
     }
 
     static findByTopicId = async (topicId) =>{
-        console.log(topicId)
         return await topic.findOne({_id: new Types.ObjectId(topicId) }).lean()
     }
 

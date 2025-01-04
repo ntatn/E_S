@@ -1,5 +1,5 @@
 <template>
-    <div class="text-center mt-24">
+    <div class="text-center mt-16">
         <h1 class="text-2xl  mb-14">
             Bạn muốn học gì hôm nay?
         </h1>

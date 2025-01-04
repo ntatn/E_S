@@ -101,7 +101,6 @@ class AccessService {
   };
 
   static signUp = async ({ name, email, password, level }) => {
-    try {
       // Check email exists?
       const hodelUser = await user.findOne({ email }).lean();
       if (hodelUser) {
@@ -148,20 +147,11 @@ class AccessService {
           },
         });
       }
-      return {
-        code: 200,
-        metadata: null,
-      };
-    } catch (err) {
-      return {
-        message: err.message,
-        status: "error",
-      };
-    }
   };
   //Profile
-  static getProfile = async ({ userId }) => {
-    const foundUser = await user.findOne({ id: userId }).lean();
+  static getProfile = async ( userId ) => {
+    const foundUser = await user.findOne({ _id: userId }).lean();
+    console.log(foundUser)
     if (!foundUser) {
       throw new BadRequestError("User not found at Here");
     }

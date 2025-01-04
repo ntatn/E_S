@@ -6,7 +6,7 @@ export default new Vuex.Store({
         isLoggedIn: false,
     },
     getters: {
-        isLoggedIn: (state) => !!state.accessToken
+        isLoggedIn: (state) => !!state.accessToken  
     },
     mutations: {
         updateLocalStorage (state, {access, userId, role}) {
@@ -15,8 +15,11 @@ export default new Vuex.Store({
             state.accessToken = access
         },
         destroyToken(state) {
-            state.accessToken = null
+            
+            localStorage.removeItem('access_token')
+            localStorage.removeItem('user_id')
             state.userId = null
+            state.accessToken = null
         },
     },
     actions: {
@@ -56,8 +59,7 @@ export default new Vuex.Store({
                 return new Promise((resolve, reject) =>{
                     axiosdefault.post('/user/logout')
                     .then(response => {
-                        localStorage.removeItem('access_token')
-                        localStorage.removeItem('user_id')
+                        context.commit('destroyToken')
                         resolve(response)
                     })
                     .catch(err => {

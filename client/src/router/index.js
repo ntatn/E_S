@@ -9,6 +9,7 @@ import LearnLesson from '../components/Topics/LearnLesson.vue'
 import QuizView from '../views/QuizView.vue'
 import ResultView from '../views/ResultView.vue'
 import auth from '../app/auth.js'
+import ContactUs from '../views/ContactUs.vue'
 
 const ifNotAuthorized = (to, from, next) => {
   if(!auth.getters.isLoggedIn){
@@ -19,6 +20,7 @@ const ifNotAuthorized = (to, from, next) => {
 }
 const ifAuthorized = (to, from, next) => {
   if(auth.getters.isLoggedIn){
+    console.log(auth.getters.isLoggedIn)
     next()
     return
   }
@@ -76,6 +78,12 @@ const router = createRouter({
       path: '/profile',
       name: 'profile',
       component: ProfileView,
+      beforeEnter: ifAuthorized
+    },
+    {
+      path: '/contact-us',
+      name: 'feedback',
+      component: ContactUs,
       beforeEnter: ifAuthorized
     }
   ],

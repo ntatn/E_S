@@ -48,10 +48,7 @@
                 Nộp bài
             </button>
         </div>
-
-        <FooterBar/>
     </div>
-    
 </template>
 
 <script setup>
@@ -129,7 +126,6 @@ export default {
             .then(res => {
                 this.sessions = res.data.metadata.contents
                 this.count = res.data.metadata.count
-                console.log(this.count)
                 this.startTimer()
                 this.checkTag()
             })
